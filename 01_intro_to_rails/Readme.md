@@ -22,8 +22,10 @@ We will still use the MVC pattern to build this app:
 To create the app we will use the following command:
 
 ```bash
-rails _6.1.4_ new flatiron-theater --api --minimal` We will be working with rails 6.
+rails _6.1.4_ new flatiron-theater --api --minimal 
 ```
+
+We will be working with rails 6.
 
 <div id='pt3'></div>
 
