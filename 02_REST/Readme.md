@@ -11,8 +11,15 @@
 - [ ] Explain the purpose of strong params
 - [ ] Recognize strong params pattern
 
-## Deliverables 
-- Review Rest   
+## Deliverables
+
+### Frontend to Backend Request Response Flow
+
+<p align="center">
+    <img src="./assets/requestresponseflow.png" width="750" height="600">
+</p>
+
+### RESTful Pattern  
 
 | HTTP Verb 	|       Path       	| Controler#Action   	|
 |-----------	|:----------------:	|--------------------	|
@@ -22,42 +29,57 @@
 | PATCH/PUT 	| /productions/:id 	| productions#update 	|
 | DELETE    	| /productions/:id 	| productions#delete 	|
 
+[Rails Status codes](http://www.railsstatuscodes.com/)
+
+Status codes we will use today:
+
+```rb
+:created # returns a 201 status code
+:unprocessable_entity # returns a 422 status code
+```
 
 
-- Demo custom routes 
-    - In the routes file, create a GET welcome route that directs to a welcome action in the productions controller
-    - use rails routes to show the new route
-    - render a message with the status of okay
-    - test the route in the browser
-- Demo dynamic routes 
-    - In the routes file, create a GET welcome/:id route that directs to a welcome_show action in the productions controller
-    - use rails routes to show the new route
-    - Use debugging tools to observe the params
-    - remove the debugging tool
-    - render a message with the status of okay
-    - test the route in the browser
-- Demo resources
-    - Add resources for productions in the routes file
-    - use rails routes to show all of the routes
-    - restrict routes using only
-        - every time a new action is added, add the route 
-- Demo Strong Params with Create
-    - Use Postman to trigger the create action
-    - In the Production controller, create action, use debugging tools to observe the params
-    - Review mass assignment and why it can be dangerous and how rails prevent us from passing params as a single hash
-    - Create strong params
-    - Remove wrapped params
-    - Create a Production using strong params 
-    - render the production with the status of created
-    - test route with Postman
+A few configurations before moving on:
 
-- Demo Update
-    - Use Postman to trigger an update action
-    - In the Production controller update action, find and update the production with strong params
-    - render the production with the status of accepted
+```rb
+inside config/initializers/wrap_parameters.rb
 
-- Demo Delete 
-    - Use Postman to trigger a delete action
-    - In the Production controller delete action, find and delete the production
-    - set head to no_content 
+ActiveSupport.on_load(:action_controller) do
+  wrap_parameters format: []
+end
+```
 
+This will ensure that parameters do not get returned nested under the resource key.
+
+<div id='pt3'></div>
+
+### Questions to ask:
+
+1. What HTTP verb is necessary?
+2. What will the REST route look like?
+3. What controller action will be responsible for handling request?
+
+#### Handling request on back end in controller:
+
+<div id='pt4'></div>
+
+1. Need to permit attributes via strong params if we want to use mass assignment:
+
+Inside ItemsController, add:
+
+```rb
+
+private
+
+    def production_params 
+        params.permit(:title, :genre, :director, :description, :budget, :image, :ongoing)
+    end
+
+```
+
+### Rescuing from RecordNotFound exception:
+
+```rb
+    rescue ActiveRecord::RecordNotFound => error 
+        render json: {message: error.message}
+```
