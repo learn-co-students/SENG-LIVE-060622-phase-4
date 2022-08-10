@@ -35,10 +35,10 @@ function ProductionForm({ addProduction }) {
       } else {
         //Display errors
         res
-          .json()
-          .then((data) =>
-            setErrors(Object.entries(data.errors).map((e) => `${e[0]} ${e[1]}`))
-          );
+        .json()
+        .then((data) => {
+            setErrors(data.errors.map((e) => `${e}`))
+        });
       }
     });
   }

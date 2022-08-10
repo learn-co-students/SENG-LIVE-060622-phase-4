@@ -11,7 +11,10 @@ function App() {
   const [errors, setErrors] = useState(false);
 
   useEffect(() => {
-    //GET to '/productions'
+    // Fetch all productions when the app component mounts
+    fetch("/productions")
+    .then(resp => resp.json())
+    .then(productions => setProductions(productions))
   }, []);
 
   const addProduction = (production) =>
