@@ -20,6 +20,28 @@ function ProductionForm({ addProduction }) {
   function onSubmit(e) {
     e.preventDefault();
     //POST '/productions'
+
+    fetch('/productions', {
+      method: "POST",
+      headers: {"Content-Type": 'application/json'},
+      body: JSON.stringify(formData)
+    })
+    .then(resp => {
+      if (resp.ok){
+        resp.json().then(addProduction) // es6 .then will implicity pass the return to addProduction:
+        // resp.json().then(production => addProduction(production))
+      } else if (resp.status === 404){
+        setErrors("404")
+      } else {
+        resp.json().then(data => {
+          debugger
+        })
+      }
+    })
+  }
+
+  if (errors === "404") {
+    return <img alt="404 image" src="https://www.elegantthemes.com/blog/wp-content/uploads/2020/02/000-404.png"/>
   }
 
   return (

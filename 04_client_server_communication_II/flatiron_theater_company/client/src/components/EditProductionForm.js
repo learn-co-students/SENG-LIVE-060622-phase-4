@@ -12,12 +12,16 @@ function EditProductionForm({ updateProduction }) {
     director: "",
     description: "",
   });
+
+  //  a hook provided to us by the react router DOM 
   const { id } = useParams();
+
+
   useEffect(() => {
     fetch(`/productions/${id}`)
       .then((res) => res.json())
       .then(setFormData);
-  }, []);
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,7 +31,22 @@ function EditProductionForm({ updateProduction }) {
   function onSubmit(e) {
     e.preventDefault();
     //PATCH to `/productions/${id}`
+    fetch(`/productions/${id}`, {
+      method: "PATCH",
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(formData)
+    })
+    .then(resp => {
+      if (resp.ok) { // if request was successful
+        resp.json().then(production => updateProduction(production))
+      } else {
+        // we need to retain error messages in state
+        resp.json().then(data => setErrors(data.errors))
+      }
+    })
   }
+
+
   return (
     <div className="App">
       {errors ? errors.map((e) => <div>{e}</div>) : null}
