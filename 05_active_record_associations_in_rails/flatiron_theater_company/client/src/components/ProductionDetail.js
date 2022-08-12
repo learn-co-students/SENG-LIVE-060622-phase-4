@@ -16,7 +16,6 @@ function ProductionDetail({deleteProduction}) {
       if(res.ok){
         console.log('okay')
         res.json().then(data => {
-          console.log(data)
           setProduction(data)
           setLoading(false)
         })
@@ -62,7 +61,11 @@ function ProductionDetail({deleteProduction}) {
   if(loading) return <h1>Loading</h1>
   if(errors) return <h1>{errors}</h1>
 
-  const {id, title, budget, genre, image,description} = production 
+  const {id, title, budget, genre, image,description, cast_members} = production 
+
+  const members = cast_members.map(cm =>  <li>{cm.role}: {cm.name}</li>)
+
+  console.log(cast_members)
  
   return (
       <CardDetail>
@@ -73,9 +76,9 @@ function ProductionDetail({deleteProduction}) {
               <p>{genre}</p>
               <h3>Description:</h3>
               <p>{description}</p>
-              <h2>Crew Memebers</h2>
+              <h2>Cast Members</h2>
               <ul>
-                {/* cast_members here */}
+                {members}
               </ul>
             </div>
             <img src={image}/>
